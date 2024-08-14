@@ -15,3 +15,11 @@ DATASETS_LEN = {
 DATASETS_RESULTS = {}
 for k in DATASETS_LEN.keys():
     DATASETS_RESULTS[k] = {'fold_0': [], 'fold_1': [], 'fold_2': [], 'fold_3': [], 'fold_4': []}
+
+PRESET_MAPPER = {
+    '2d_materials': ['unconvbench_exfoliation', 'unconvbench_2d_gap', 'unconvbench_2d_e_tot'],
+    'MOF': ['unconvbench_co2_adsp', 'unconvbench_qmof'],
+    'defected': ['unconvbench_supercon', 'unconvbench_defected'],
+    'sizes': ['unconvbench_bulk_s', 'unconvbench_bulk_m', 'unconvbench_bulk_l'],
+    'defected_bulk': ['unconvbench_defected', 'unconvbench_src_bulk']
+}
