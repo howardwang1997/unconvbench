@@ -1,11 +1,13 @@
+import json
+import gzip
 from monty.json import MSONable
-from matbench.matbench.util import MSONable2File
+from monty.serialization import dumpfn
 
 from .task import DatasetsTasks
 from .constant import PRESET_MAPPER
 
 
-class UnconvbenchBenchmark(MSONable, MSONable2File):
+class UnconvbenchBenchmark(MSONable):
     def __init__(self, **kwargs):
         dt = DatasetsTasks()
         self.DATASETS_TASKS = dt.get_tasks()
@@ -44,3 +46,20 @@ class UnconvbenchBenchmark(MSONable, MSONable2File):
         """
         for t in self.tasks:
             t.load()
+
+    def to_file(self, filename):
+        d = self.as_dict()
+        dumpfn(d, filename)
+
+    @classmethod
+    def from_file(cls, filename):
+        if filename.endswith(".gz"):
+            with gzip.open(filename, "rb") as f:
+                d = json.loads(f.read().decode("utf-8"))
+        else:
+            with open(filename) as f:
+                d = json.load(f)
+
+        return cls.from_dict(d)
+
+# validation to be implemented
