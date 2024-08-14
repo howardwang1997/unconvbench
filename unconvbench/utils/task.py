@@ -7,8 +7,8 @@ import numpy as np
 import pandas as pd
 from torch.nn import L1Loss, MSELoss
 
-from constant import DATASETS_LEN, DATASETS_RESULTS
-from unconvbench_utils import load_dataset
+from .constant import DATASETS_LEN, DATASETS_RESULTS
+from .unconvbench_utils import load_dataset
 
 CODE_PATH = up(up(os.path.abspath(__file__)))
 
@@ -103,6 +103,5 @@ class DatasetsTasks:
         for k in DATASETS_LEN.keys():
             self.DATASETS_TASKS[k] = Task(k)
 
-    @staticmethod
     def get_tasks(self):
         return self.DATASETS_TASKS

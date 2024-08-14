@@ -1,4 +1,4 @@
-from task import DatasetsTasks
+from .task import DatasetsTasks
 
 
 class UnconvbenchBenchmark:

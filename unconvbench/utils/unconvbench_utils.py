@@ -3,37 +3,12 @@ import os
 from os.path import dirname as up
 
 import pandas as pd
-from jarvis.core.atoms import Atoms
-from pymatgen.io.jarvis import JarvisAtomsAdaptor
 from pymatgen.core import Structure
 from sklearn.model_selection import KFold
 
-from constant import DATASETS_LEN
+from .constant import DATASETS_LEN
 
 CODE_PATH = up(up(os.path.abspath(__file__)))
-
-
-def jarvis_dataset_to_mp(dataset, label, name, save=False): # need removal
-    try:
-        data = [d['atoms'] for d in dataset]
-    except KeyError:
-        data = [d['defective_atoms'] for d in dataset]
-    labels = [d[label] for d in dataset]
-    converter = JarvisAtomsAdaptor()
-    data = [converter.get_structure(Atoms.from_dict(d)).as_dict() for d in data]
-    data_matbench = [[data[i], labels[i]] for i in range(len(data))]
-    index = list(range(len(data)))
-    assert len(data) == len(labels)
-
-    final = {
-        "index": index,
-        "columns": ['structure', label],
-        "data": data_matbench
-    }
-    if save:
-        with open(os.path.join(CODE_PATH, 'datasets', f'ub_{name}.json'), 'w+') as f:
-            json.dump(final, f)
-    return final
 
 
 def _get_list_name(name, length, index):
