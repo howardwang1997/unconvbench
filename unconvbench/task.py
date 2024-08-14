@@ -8,7 +8,7 @@ import pandas as pd
 from torch.nn import L1Loss, MSELoss
 
 from .constant import DATASETS_LEN, DATASETS_RESULTS
-from .unconvbench_utils import load_dataset
+from .utils import load_dataset
 
 CODE_PATH = up(up(os.path.abspath(__file__)))
 
