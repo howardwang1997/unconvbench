@@ -10,6 +10,7 @@ from .utils import immutify_dictionary, hash_dictionary
 
 
 class UnconvbenchBenchmark(MSONable):
+    # fix the keys in next update
     def __init__(self, autoload=False, **kwargs):
         self.benchmark_name = 'unconvbench-1.0.1'
         dt = DatasetsTasks()
