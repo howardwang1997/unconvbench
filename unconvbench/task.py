@@ -77,7 +77,7 @@ class Task:
         with open(self.path) as f:
             dataset = json.load(f)
         self.inputs, self.outputs = load_dataset(dataset, self.dataset_name)
-        with open(os.path.join(CODE_PATH, 'unconvbench', 'metadata_validation.json')) as f:
+        with open(os.path.join(CODE_PATH, 'datasets', 'metadata_validation.json')) as f:
             self.splits = json.load(f)['splits'][self.dataset_name]
 
     def get_train_and_val_data(self, fold, as_type='tuple'):

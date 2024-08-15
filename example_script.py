@@ -32,7 +32,7 @@ for task in benchmark.tasks:
 
 hyperparam = None
 metadata = {
-    "algorithm_version": "v6.0.1",
+    "algorithm_version": "1.0.1",
     "hyperparameters": hyperparam
 }
 
