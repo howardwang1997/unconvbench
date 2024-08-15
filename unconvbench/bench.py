@@ -1,6 +1,8 @@
 import datetime
 import json
 import gzip
+import traceback
+
 from monty.json import MSONable
 from monty.serialization import dumpfn
 
@@ -20,8 +22,8 @@ class UnconvbenchBenchmark(MSONable):
 
         self.all_tasks = self.DATASETS_TASKS.values()
         self.user_metadata = None
-        if autoload:
-            self.load()
+
+        self.tasks_map = {}
 
     @property
     def tasks(self):
@@ -207,4 +209,28 @@ class UnconvbenchBenchmark(MSONable):
 
         return obj
 
-# validation to be implemented
+    def validate(self):
+        """Run validation on each task in this benchmark, from matbench.
+
+        Returns:
+            ({str: str}): dict of errors, if they exist
+
+        """
+        errors = {}
+        for t, t_obj in self.DATASETS_TASKS.items():
+            try:
+                t_obj.validate()
+            except BaseException:
+                errors[t] = traceback.format_exc()
+        return errors
+
+    @property
+    def scores(self):
+        """Get all score metrics for all tasks as a dictionary, from matbench.
+
+        Returns:
+            (RecursiveDotDict): A nested dictionary-like object of scores
+                for each task.
+
+        """
+        return {t.dataset_name: t.scores for t in self.tasks}
