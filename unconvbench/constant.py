@@ -23,3 +23,5 @@ PRESET_MAPPER = {
     'sizes': ['unconvbench_bulk_s', 'unconvbench_bulk_m', 'unconvbench_bulk_l'],
     'defected_bulk': ['unconvbench_defected', 'unconvbench_src_bulk']
 }
+
+VERSION = '1.0.1'
