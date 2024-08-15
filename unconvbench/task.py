@@ -2,6 +2,7 @@ import json
 import os
 from os.path import dirname as up
 
+from monty.json import MSONable
 import torch
 import numpy as np
 import pandas as pd
@@ -21,7 +22,7 @@ class DotDict(dict):
 
 class Task:
     def __init__(self, name, **kwargs):
-        self.benchmark_name = 'unconvbench_v1.0.1'
+        self.benchmark_name = 'unconvbench-1.0.1'
         self.dataset_name = name
         self.metadata = {
             'input_type': 'structure',
@@ -48,6 +49,7 @@ class Task:
         self.path = os.path.join(CODE_PATH, 'datasets', f'ub_{name}.json')
         self.loaded = False
         self.inputs = self.outputs = self.splits = None
+        self.results = DATASETS_RESULTS
 
     def record(self, fold, predictions, **kwargs):
         predictions = torch.tensor(predictions).view(-1)
@@ -69,12 +71,13 @@ class Task:
         all_results[self.dataset_name][self.folds_map[fold]] = predictions
         with open('UB_results.json', 'w+') as f:
             json.dump(all_results, f)
+        self.results = all_results
 
     def load(self):
         with open(self.path) as f:
             dataset = json.load(f)
         self.inputs, self.outputs = load_dataset(dataset, self.dataset_name)
-        with open(os.path.join(CODE_PATH, 'utils', 'metadata_validation.json')) as f:
+        with open(os.path.join(CODE_PATH, 'unconvbench', 'metadata_validation.json')) as f:
             self.splits = json.load(f)['splits'][self.dataset_name]
 
     def get_train_and_val_data(self, fold, as_type='tuple'):
@@ -95,6 +98,70 @@ class Task:
                 return pd.concat([self.inputs[keys], self.outputs[keys]], axis=1)
         else:
             return self.inputs[keys]
+
+    @classmethod
+    def from_dict(cls, d):
+        """Create a MatbenchTask from a dictionary input, from matbench.
+
+        Required method from MSONable.
+
+        Args:
+            d (dict):
+
+        Returns:
+            (MatbenchTask): The MatbenchTask object.
+
+        """
+        req_base_keys = [
+            "@module",
+            "@class",
+            'dataset_name',
+            'results',
+            'benchmark_name',
+        ]
+        for k in req_base_keys:
+            if k not in d:
+                raise KeyError(f"Required key '{k}' not found.")
+        extra_base_keys = [k for k in d.keys() if k not in req_base_keys]
+        if extra_base_keys:
+            raise KeyError(f"Extra keys {extra_base_keys} not allowed.")
+        return cls._from_args(
+            dataset_name=d['dataset_name'],
+            benchmark_name=d['benchmark_name'],
+            results_dict=d['results'],
+        )
+
+    @classmethod
+    def _from_args(cls, dataset_name, benchmark_name, results_dict):
+        """Instantiate a MatbenchTask from a arguments, from matbench
+
+        Args:
+            dataset_name (str): The name of the dataset/task
+            benchmark_name (str): The name of the corresponding benchmark
+            results_dict (dict): A formatted dictionary of raw results.
+
+        Returns:
+            (MatbenchTask): The matbench task object.
+        """
+        obj = cls(dataset_name, autoload=False, benchmark=benchmark_name)
+        # obj.validate()
+        return obj
+
+    def as_dict(self):
+        """Return a MatbenchTask object as a dictionary, from matbench.
+
+        Required method from MSONAble.
+
+        Returns:
+            (dict): The object as a serialized dictionary.
+        """
+        return {
+            "@module": self.__class__.__module__,
+            "@class": self.__class__.__name__,
+            'benchmark_name': self.benchmark_name,
+            'dataset_name': self.dataset_name,
+            'results': dict(self.results),
+        }
 
 
 class DatasetsTasks:
