@@ -20,7 +20,7 @@ For easier usage, the workflow of this benchmark mostly complies with another be
 The usage of this benchmark and the API is similar with `matbench`. Example script to run this benchmark is shown in the
 file `example_script.py`.
 
-## Submitting the result
+## Submit the result
 Please include your model, the `YourModel_result.json.gz` in a subdirectory under `benchmarks`. You are encouraged to
 include a json file to introduce your model and the hyperparameters. The benchmark results will be shown in 
 `benchmarks/README.md`.
