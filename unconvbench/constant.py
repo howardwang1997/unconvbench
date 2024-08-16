@@ -1,3 +1,5 @@
+VERSION = '1.0.1'
+
 DATASETS_LEN = {
     'unconvbench_supercon': 1058,
     'unconvbench_exfoliation': 4527,
