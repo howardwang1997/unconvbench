@@ -16,8 +16,8 @@ Please find the datasets required on Figshare: https://figshare.com/articles/dat
 them to directory `datasets`.
 
 ## Run the benchmark
-For easier usage, the workflow of this benchmark mostly complies with another benchmark for crystals named `matbench`.
-The usage of this benchmark and the API is similar with `matbench`. Example script to run this benchmark is shown in the
+For easy usage, the workflow of this benchmark mostly complies with another benchmark for crystals named `matbench`.
+The usage of this benchmark and the API are similar with `matbench`. Example script to run this benchmark is shown in the
 file `example_script.py`.
 
 ## Submit the result
